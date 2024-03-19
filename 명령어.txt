@@ -1,0 +1,70 @@
+
+
+
+docker ps 
+- 실행중인 도커 컨테이너를 표시함
+
+docer ps -a
+- 도커가 생성한 모든 컨테이너, 프로세스가 표시됨
+
+docker stop + 도커파일이름
+- 실행중인 도커파일 중지
+
+docker run -p 3000:3000 + 이미지 아이디
+- 도커 이미지 컨테이너로 실행, 3000(내 마음대로->로컬에서 띄울 로컬번호):3000(도커파일에-expose 명시돼있는 포트번호)
+- 이미지를 기반으로 새 컨테이너를 생성 후 실행함
+
+docker build . 
+- 현재 파일 도커 이미지 빌드
+
+docker start + 도커아이디 or 도커이름
+- 중지된 컨테이너 재실행
+
+
+docker image prune -a
+- 로컬에 있는 전체 도커이미지 제거
+
+docker login
+- 도커 허브에 이미지 푸시할 때 권한이 거부되면 로그인 하고 푸시하면됨
+
+docker images
+- 도커 이미지들 확인
+
+docker build -t aiminghee3/node-complete .
+- 도커 이미지 빌드, -t는 이미지에 태그를 지정하는 옵션, 
+- aiminghee3/node-complete에서 aiminghee는 도커 허브에 있는 사용자 이름이고
+- node-complete는 해당 이미지의 이름
+- 즉 빌드된 이미지에 aiminghee3/node-complete 라는 태그를 붙이겠다는 의미임
+- . 은 빌드 컨텍스트를 나타냄, 현재 위치에서 Dockerfile을 찾아서 이미지를 빌드함
+
+
+docker run -p 3000:80 -d --name feedback-app --rm  feedback-node 
+- -d는 컨테이너 실행할 때 터미널 사용할 수 있게 하는 명령어 : detach모드
+- --name feedback-app 컨테이너의 이름을 정해줌
+--rm 컨테이너 중단시킬 때 제거해줌
+- feedback-node는 이미지 이름임
+
+docker rmi
+- 도커 이미지 제거하는 코드
+
+docker volume ls
+- 도커의 볼륨 리스트를 확인할 수 있음
+
+docker volume rm 볼륨이름
+- 특정 볼륨 제거
+
+docker volume prune
+- 사용하지 않는 전체 볼륨 제거
+
+바인드 마운트
+- 이는 간단하게 설명하자면 소스코드의 변경사항을 컨테이너에서 읽을 수 있게 하는 도구다
+- 하지만 도커파일에 쓰는게 아니라 컨테이너를 실행할 때 명령어를 적어준다.
+- 왜냐면 바인드 마운트는 이미지가 아니라 컨테이너랑 연관되었기 때문이다.
+- 바인드 마운트가 왜 중요하나면 개발자 입장에서 개발을 할 때 실시간으로 소스코드의 변경을 확인하고 싶다.
+- 하지만 바인드 마운트를 적용하지 못하면 개발자는 이를 위해 이미지를 재 빌드하고 컨테이너를 재 실행하는 수고를 해야한다.
+- 그래서 바인드 마운트를 적용해서 소스코드의 변경을 바로 확인할 수 있게 하는 편리한 기능이다.
+
+바인드 마운트 코드
+docker run -d -p 3000:80 --rm --name feedback-app -v feedback:/app/feedback -v "/Users/jojunhui/Desktop/project/docker/docker-volume:/app" feedback-node:volumes
+여기선 절대경로를 사용해야함 "/Users/jojunhui/Desktop/project/docker/docker-volume:/app"    
+:전까지의 경로를 /app에 넣겠다.
