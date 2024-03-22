@@ -68,3 +68,45 @@ docker volume prune
 docker run -d -p 3000:80 --rm --name feedback-app -v feedback:/app/feedback -v "/Users/jojunhui/Desktop/project/docker/docker-volume:/app" feedback-node:volumes
 여기선 절대경로를 사용해야함 "/Users/jojunhui/Desktop/project/docker/docker-volume:/app"    
 :전까지의 경로를 /app에 넣겠다.
+
+http://host.docker.internal
+- host.docker.internal은 도커의 명령어인데 컨테이너의 ip주소를 도커가 찾아서 할당해주는거임 
+
+
+docker container inspect 컨테이너 이름
+- 도커 컨테이너의 정보를 확인할 수 있음
+
+docker network create 네트워크 이름 
+- 도커 네트워크를 생성함
+
+docker network ls 
+- 도커의 네트워크 리스트 확인
+
+ docker run -d --name mongodb(컨테이너 이름) --network test-net(네트워크 이름) mongo(도커 허브에 있는거)
+- 도커 허브에 있는 이미지를 내 로컬로 원하는 이름으로 가져옴
+
+'mongodb://mongodb:27017/swfavorites',
+- db연결 주소인데, 컨테이너가 같은 네트워크 상에 있으면 'mongodb'처럼 연결하고 싶은 컨테이너의 이름을 입력하면됨
+
+docker run --name favorites --network test-net(네트워크 이름) -d --rm -p 3000:3000 favorite-node
+- 같은 네트워크상에 있는 다른 컨테이너와 연결할 수 있게 컨테이너를 실행하는 코드
+
+docker logs [옵션] [컨테이너 이름 또는 ID]
+
+docker build --platform linux/amd64 -t algorithm-server . 
+- 배포할 때 다양한 플랫폼 지원하게 해야함
+
+--add-host=host.docker.internal:host-gateway 
+리눅스 서버에선 맥이랑 윈도우랑 달리 도커가 Mysql게이트를 찾지못해서 docker run 할 때 이 명령어 같이 써줘야함
+
+docker-compose up -d
+- 도커 컴포즈 파일에 명시된 모든 컨테이너가 생성됨
+
+docker-compose down
+- 컴포트 파일에 있는 모든 컨테이너가 삭제되고 생성된 디폴트 네트워크와 모든 것이 종료됨, 볼륨은 삭제되지 않음
+
+docker-compose down -v
+- 볼륨도 삭제하는 명령어 하지만 볼륨엔 데이터가 남아이썽서 일반적으로 사용하진 않음 
+
+docker-compose up --build
+- 도커 컴퐅크에 있는 이미지들을 강제 리빌드하여 실행할 수 있음 

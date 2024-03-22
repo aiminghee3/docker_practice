@@ -1,0 +1,40 @@
+verstion : "3.8" # 도커 버전, 도커 컴포즈파일을 사용하면 -d, --rm옵션이 컨테이너에 자동으로 들어감
+services: # 컨테이너 
+  mongodb:
+    image: 'mongo' # 이미지 이름, 도커허브에 있는 aimginhee3/test 같은거
+    container_name: mongodb # 컨테이너 이름을 명시함
+    volumes:
+      - data:/data/db # 볼륨 경로, 볼륨은 나중에 더 공부해야할듯
+    environment:
+      - KEY=value # - 키 - 벨류 형식으로 작성하면 될듯
+    env_file:
+      - fileName # 추가하려는 파일의 상대경로를 입력하면 됨
+  backend:
+    build: ./backend # 도커파일이 있는 경로를 찾아서 이미지를 빌드함
+    #build:
+    #  context: ./backend
+    #  dockerfile: Dockerfile # 도커파일의 이름을 명시 얘시 -> Dockerfile-dev
+    #  arg: aisdjlsiadj # arg를 추가할 수 있음 
+    #   some-arg: 1
+    image: 'goals-node' 
+    ports: 
+      - '3000:80' # 호스트포트가 3000, 컨테이너포트가 80
+    volumes:
+      - logs:/app/logs
+      - ./backend:/app # backend폴더에 있는 모든 것들을 컨테이너 내부의 app에 바인딩함
+      - /app/node_modules
+    env_file:
+      - ./env/backend.env
+    depends_on:
+      - serviceName # 특정 컨테이너에 의존함, 여러 컨테이너랑 상호작용을 할 수 있으니까 여기선 backend컨테이너가 mongodb랑 상호작용하니까 먼저 동작해야하는 mongodb를 적음
+  frontend:
+    build: ./frontend # 이미지가 있으면 재빌드하진 않음
+    ports: '3000:3000'
+    volumes:
+      - ./frontend/src:/app/src # 바인드마운트 적용
+    stdin_open: true # 이 서비스에 개방형 입력 연결이 필요하다는 것을 도커에게 알림 -> 리액트에서 -it 명령어 사용해야 오류가 안뜨는거랑 똑같달까?
+    tty: true # 위에랑 같이 쓰면 인터렉티브 모드에서 시작됨
+    depends_on:
+      - backend
+
+
