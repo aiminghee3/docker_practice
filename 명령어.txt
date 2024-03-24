@@ -104,9 +104,20 @@ docker-compose up -d
 
 docker-compose down
 - 컴포트 파일에 있는 모든 컨테이너가 삭제되고 생성된 디폴트 네트워크와 모든 것이 종료됨, 볼륨은 삭제되지 않음
-
+d
 docker-compose down -v
 - 볼륨도 삭제하는 명령어 하지만 볼륨엔 데이터가 남아이썽서 일반적으로 사용하진 않음 
 
 docker-compose up --build
 - 도커 컴퐅크에 있는 이미지들을 강제 리빌드하여 실행할 수 있음 
+
+docker exec -it(인터렉티브 모드) + 컨테이너 이름 + 명령어(ex : npm init)
+컨테이너 말고 이미지에서 적용하려면 docker run도 가능
+- 이 컨테이너가 실행하는 기본 명령 외에 실행 중인 컨테이너 내에서 특정 명령을 실행할 수 있음
+- 따라서 Dockerfile에 지정되어 있는 명령 외에 입력된 특정 명령을 실행하게 됨?
+- 따라서 어플리케이션은 실행 중인 상태에서 컨테이너에 명령을 내릴 수 있음 
+
+Dockerfile에서 ENTRYPOINT -> ex : ENTRYPOINT ["npm"]
+- 도커 run 같은 명령어에서 마지막 명령어의 baseurl같은 느낌 ex: docker run ~~~ + 컨테이너 이름 + 명령어(init이 => npm init이렇게 변함)
+
+docker compose run, docker compose exec 나중에 쓰게되면 함 찾아보셈
