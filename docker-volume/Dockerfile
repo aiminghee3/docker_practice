@@ -8,7 +8,7 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 80 
+EXPOSE 80
 
 # VOLUME ["/app/node_modules"]
 
@@ -31,4 +31,3 @@ CMD ["npm", "start"]
 
 # 근데 저기에 익명 볼륨으로 node_modules안쓰면 오류생김 이유는 좀 어려워서 나중에 공부하려면 다른 볼륨 결합 & 병합하기 강의 들으면됨
 # docker run -d -p 3000:80 --rm --name feedback-app -v feedback:/app/feedback -v "/Users/jojunhui/Desktop/project/docker/docker-volume:/app" -v /app/node_modules feedback-node:volumes
-# 토스 월세지원확인#
